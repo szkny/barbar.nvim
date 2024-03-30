@@ -509,7 +509,7 @@ local function get_bufferline_containers(data, bufnrs, refocus)
         (hlName and wrap_hl(hlName) or buffer_hl)
       if not icons_option.filetype.custom_colors then
         local hlDevIcon = vim.api.nvim_get_hl(0, { name = hlName })
-        vim.api.nvim_set_hl(0, "BufferCurrent", { fg = hlDevIcon.fg, bg = "none" })
+        vim.api.nvim_set_hl(0, hlName, { fg = hlDevIcon.fg, bg = "none" })
       end
       icon.text = #name.text > 0 and iconChar .. ' ' or iconChar
     end
