@@ -477,7 +477,9 @@ function api.set_offset(width, text, hl, side, opts)
     side = 'left'
   end
 
-  if text == nil then
+  if type(opts.text) == "function" then
+    text = opts.text()
+  elseif text == nil then
     text = opts.text or ''
   end
 
