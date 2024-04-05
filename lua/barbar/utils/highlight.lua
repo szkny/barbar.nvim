@@ -54,6 +54,9 @@ end
 --- @param default barbar.utils.hl.color.value a color name (`string`), GUI hex (`string`), or cterm color code (`integer`).
 --- @return barbar.utils.hl.color.value color
 local function get_hl_color_or_default(groups, attribute, default)
+  if attribute == "bg" then
+    return default
+  end
   for _, group in ipairs(groups) do
     local hl_attribute = get_hl_cached(group)[attribute]
     if hl_attribute then
