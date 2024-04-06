@@ -91,7 +91,7 @@ function buffer.get_name(buffer_number, hide_extensions)
   local no_name_title = config.options.no_name_title
 
   if name ~= '' then
-    name = buf_get_option(buffer_number, 'buftype') == 'terminal' and terminalname(name) or basename(name, hide_extensions)
+    name = buf_get_option(buffer_number, 'buftype') == 'terminal' and vim.fn.bufname("%") or basename(name, hide_extensions)
   elseif no_name_title ~= nil and no_name_title ~= vim.NIL then
     name = no_name_title
   end
