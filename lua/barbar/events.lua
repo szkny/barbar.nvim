@@ -223,7 +223,7 @@ function events.enable()
   create_autocmd('DiagnosticChanged', {
     callback = function(event)
       state.update_diagnostics(event.buf)
-      render.update()
+      -- render.update()
     end,
     group = augroup_render,
   })
