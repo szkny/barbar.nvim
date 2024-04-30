@@ -32,8 +32,8 @@ local jump_mode = require('barbar.jump_mode')
 local layout = require('barbar.ui.layout')
 local render = require('barbar.ui.render')
 local state = require('barbar.state')
-local try = require('barbar.utils.try')
-local catch = require('barbar.utils.catch')
+local try = require('barbar.utils').try
+local catch = require('barbar.utils').catch
 
 --- The `<mods>` used for the close click handler
 local CLOSE_CLICK_MODS = vim.api.nvim_cmd and { confirm = true } or 'confirm'

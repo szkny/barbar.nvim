@@ -25,8 +25,8 @@ local buffer = require('barbar.buffer')
 local config = require('barbar.config')
 local fs = require('barbar.fs')
 local utils = require('barbar.utils')
-local try = require('barbar.utils.try')
-local catch = require('barbar.utils.catch')
+local try = require('barbar.utils').try
+local catch = require('barbar.utils').catch
 
 local CACHE_PATH = vim.fn.stdpath('cache') .. '/barbar.json'
 local ERROR = severity.ERROR
