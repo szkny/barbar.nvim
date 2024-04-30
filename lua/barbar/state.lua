@@ -25,6 +25,8 @@ local buffer = require('barbar.buffer')
 local config = require('barbar.config')
 local fs = require('barbar.fs')
 local utils = require('barbar.utils')
+local try = require('barbar.utils.try')
+local catch = require('barbar.utils.catch')
 
 local CACHE_PATH = vim.fn.stdpath('cache') .. '/barbar.json'
 local ERROR = severity.ERROR
@@ -274,32 +276,40 @@ end
 --- Update the names of all buffers in the bufferline.
 --- @return nil
 function state.update_names()
-  local buffer_index_by_name = {}
-  local hide_extensions = config.options.hide.extensions
+  try {
+    function ()
+      local buffer_index_by_name = {}
+      local hide_extensions = config.options.hide.extensions
 
-  -- Compute names
-  for i, buffer_n in ipairs(state.buffers) do
-    local name = buffer.get_name(buffer_n, hide_extensions)
+      -- Compute names
+      for i, buffer_n in ipairs(state.buffers) do
+        local name = buffer.get_name(buffer_n, hide_extensions)
 
-    if buffer_index_by_name[name] == nil then
-      buffer_index_by_name[name] = i
-      state.get_buffer_data(buffer_n).name = name
-    else
-      local other_i = buffer_index_by_name[name]
-      local other_n = state.buffers[other_i]
-      local new_name, new_other_name =
-        buffer.get_unique_name(
-          buf_get_name(buffer_n),
-          buf_get_name(state.buffers[other_i]))
+        if buffer_index_by_name[name] == nil then
+          buffer_index_by_name[name] = i
+          state.get_buffer_data(buffer_n).name = name
+        else
+          local other_i = buffer_index_by_name[name]
+          local other_n = state.buffers[other_i]
+          local new_name, new_other_name =
+            buffer.get_unique_name(
+              buf_get_name(buffer_n),
+              buf_get_name(state.buffers[other_i]))
 
-      state.get_buffer_data(buffer_n).name = new_name
-      state.get_buffer_data(other_n).name = new_other_name
-      buffer_index_by_name[new_name] = i
-      buffer_index_by_name[new_other_name] = other_i
-      buffer_index_by_name[name] = nil
-    end
+          state.get_buffer_data(buffer_n).name = new_name
+          state.get_buffer_data(other_n).name = new_other_name
+          buffer_index_by_name[new_name] = i
+          buffer_index_by_name[new_other_name] = other_i
+          buffer_index_by_name[name] = nil
+        end
 
-  end
+      end
+    end,
+    catch {
+      function ()
+      end
+    }
+  }
 end
 
 --- @deprecated use `api.set_offset` instead

@@ -32,6 +32,8 @@ local jump_mode = require('barbar.jump_mode')
 local layout = require('barbar.ui.layout')
 local render = require('barbar.ui.render')
 local state = require('barbar.state')
+local try = require('barbar.utils.try')
+local catch = require('barbar.utils.catch')
 
 --- The `<mods>` used for the close click handler
 local CLOSE_CLICK_MODS = vim.api.nvim_cmd and { confirm = true } or 'confirm'
@@ -279,24 +281,32 @@ function events.enable()
           local side --- @type side
           local autocmd = create_autocmd({'BufWinEnter', 'WinScrolled'}, {
             callback = function()
-              if bufwinid == nil then
-                bufwinid = vim.fn.bufwinid(tbl.buf)
-              end
+              try {
+                function ()
+                  if bufwinid == nil then
+                    bufwinid = vim.fn.bufwinid(tbl.buf)
+                  end
 
-              local col = win_get_position(bufwinid)[2]
-              local other_side
-              if col < middle then
-                side, other_side = 'left', 'right'
-              else
-                side, other_side = 'right', 'left'
-              end
+                  local col = win_get_position(bufwinid)[2]
+                  local other_side
+                  if col < middle then
+                    side, other_side = 'left', 'right'
+                  else
+                    side, other_side = 'right', 'left'
+                  end
 
-              local width = win_get_width(bufwinid)
-              if width ~= widths[ft] then
-                widths[side][ft] = width
-                widths[other_side][ft] = nil
-                api.set_offset(total_widths(side), nil, nil, side, option)
-              end
+                  local width = win_get_width(bufwinid)
+                  if width ~= widths[ft] then
+                    widths[side][ft] = width
+                    widths[other_side][ft] = nil
+                    api.set_offset(total_widths(side), nil, nil, side, option)
+                  end
+                end,
+                catch {
+                  function ()
+                  end
+                }
+              }
             end,
             group = augroup_render,
           })
