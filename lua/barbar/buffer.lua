@@ -18,6 +18,7 @@ local split = vim.split
 local strcharpart = vim.fn.strcharpart --- @type function
 local strwidth = vim.api.nvim_strwidth --- @type function
 
+local add_reverse_lookup = require('barbar.utils.table').add_reverse_lookup
 local basename = require('barbar.fs').basename
 local config = require('barbar.config')
 local slice_from_end = require('barbar.utils.list').slice_from_end
@@ -31,7 +32,7 @@ local ELLIPSIS_LEN = strwidth(ELLIPSIS)
 
 --- A bidirectional map of activities to activity names
 --- @type {[barbar.buffer.activity]: barbar.buffer.activity.name, [barbar.buffer.activity.name]: barbar.buffer.activity}
-local activities = vim.tbl_add_reverse_lookup {'Inactive', 'Alternate', 'Visible', 'Current'}
+local activities = add_reverse_lookup {'Inactive', 'Alternate', 'Visible', 'Current'}
 
 --- The character used to delimit paths (e.g. `/` or `\`).
 local separator = package.config:sub(1, 1)
