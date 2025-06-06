@@ -42,7 +42,6 @@ function table.set(tbl, keys, value)
   current[keys[#keys]] = value
 end
 
-
 --- Add the reverse lookup values to an existing table.
 --- For example:
 --- `add_reverse_lookup { A = 1 } == { [1] = 'A', A = 1 }`

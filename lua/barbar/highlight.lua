@@ -1,7 +1,7 @@
 -- !::exe [So]
 
 local config = require('barbar.config')
-local hl = require('barbar.utils.highlight')
+local hl = require('barbar.utils.highlight') --- @type barbar.utils.Hl
 local icons = require('barbar.icons')
 
 -- Setup the highlight groups used by the plugin.
@@ -182,7 +182,6 @@ function highlight.setup()
       hl.set('BufferDefaultAlternateSign', bg, fg_special, sp, attributes)
     else
       sp = hl.fg_or_default({'DiagnosticSignHint'}, 0xD5508F).gui
-      attributes.underline = true
 
       hl.set('BufferDefaultAlternateSign', bg, bg_tabline, sp, attributes)
       if preset == 'powerline' then
@@ -218,7 +217,6 @@ function highlight.setup()
       hl.set('BufferDefaultCurrentSign', bg, fg_special, sp, attributes)
     else
       sp = hl.sp_or_default(current_hl, 0x60AFFF)
-      attributes.underline = true
 
       hl.set('BufferDefaultCurrentSign', bg, bg_tabline, sp, attributes)
       if preset == 'powerline' then
@@ -287,7 +285,6 @@ function highlight.setup()
       hl.set('BufferDefaultVisibleSign', bg, fg, sp, attributes)
     else
       sp = hl.fg_or_default({'Delimiter'}, 0xFFFFFF).gui
-      attributes.underline = true
 
       hl.set('BufferDefaultVisibleSign', bg, bg_tabline, sp, attributes)
       if preset == 'powerline' then
@@ -311,6 +308,15 @@ function highlight.setup()
   end
 
   icons.set_highlights()
+end
+
+--- Calls resets the highlight cache and then sets up highlighting.
+---
+--- @see barbar.utils.Hl.reset_cache for details on the cache reset
+--- @see barbar.Highlight.setup for details on setting up highlights
+function highlight.resetup()
+  hl.reset_cache()
+  highlight.setup()
 end
 
 return highlight
